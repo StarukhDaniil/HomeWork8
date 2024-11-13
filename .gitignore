@@ -1,0 +1,5 @@
+.gitignore
+*.bat
+.vs/
+build/
+out/
