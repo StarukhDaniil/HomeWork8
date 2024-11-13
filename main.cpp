@@ -1,6 +1,7 @@
 #include <iostream>
+#include "sharedPointer.h"
 
 int main() {
-	std::cout << "hello" << std::endl;
+
 	return 0;
 }
