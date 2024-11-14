@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-
+#include "ptrCounter.h"
 
 template <typename T>
 class sharedPointer {
@@ -11,6 +11,7 @@ public:
 	sharedPointer(T* ptr) {
 		++(*counter);
 		this->ptr = ptr;
+		
 	}
 	
 	sharedPointer(const sharedPointer<T>& other) {
