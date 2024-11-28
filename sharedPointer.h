@@ -1,19 +1,33 @@
 #pragma once
 #include <iostream>
-#include "ptrCounter.h"
 
 template <typename T>
 class SharedPointer {
 private:
 	T* ptr = nullptr;
+	int* counter = new int(1);
 public:
-	SharedPointer(T* ptr);
-	SharedPointer(const SharedPointer<T>& other);
-	SharedPointer<T>& operator=(const SharedPointer<T>& other);
+	bool operator==(const T*& ptr) const;
+	bool operator==(const SharedPointer<T>& other) const;
 	T& operator*() const;
 	T* operator->() const;
-	operator bool() const;
+	explicit operator bool() const;
+
+	SharedPointer(const T*&& ptr);
+	SharedPointer(const SharedPointer<T>& other);
+	SharedPointer<T>& operator=(const SharedPointer<T>& other);
+	SharedPointer<T>& operator=(const T*&& ptr);
+
+	SharedPointer(SharedPointer<T>&& other) noexcept;
+	SharedPointer<T>& operator=(SharedPointer<T>&& other) noexcept;
+
 	~SharedPointer() noexcept;
+};
+
+template <typename T>
+struct SharedPointerHash {
+	size_t operator()(const SharedPointer<T>& sharedPointer) const noexcept;
+	size_t operator()(SharedPointer<T>* const& sharedPointer) const noexcept;
 };
 
 #include "sharedPointer.cpp"
