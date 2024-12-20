@@ -1,11 +1,12 @@
 #pragma once
 #include <iostream>
+#include "atomic"
 
 template <typename T>
 class SharedPointer {
 private:
 	T* ptr = nullptr;
-	int* counter = new int(1);
+	std::atomic<int>* counter = new std::atomic<int>(1);
 public:
 	bool operator==(const T*& ptr) const;
 	bool operator==(const SharedPointer<T>& other) const;

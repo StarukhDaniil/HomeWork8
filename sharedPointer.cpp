@@ -111,7 +111,7 @@ SharedPointer<T>::~SharedPointer() noexcept {
 		return;
 	}
 
-	std::cout << ptr << ": " << *counter << std::endl;
+	//std::cout << ptr << ": " << *counter << std::endl;
 	--(*counter);
 	if ((*counter == 0) && (this->ptr != nullptr)) {
 		delete ptr;
