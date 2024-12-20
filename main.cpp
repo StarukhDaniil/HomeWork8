@@ -21,5 +21,6 @@ int main() {
 		std::cout << p1->getData() << std::endl;
 	}
 	t1.join();
+
 	return 0;
 }
