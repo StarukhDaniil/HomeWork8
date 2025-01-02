@@ -1,38 +1,26 @@
 #include <iostream>
 #include "sharedPointer.h"
+#include "resource.h"
 #include <unordered_set>
 #include <algorithm>
+#include <thread>
+#include <chrono>
+
+void threadFunction(const SharedPointer<Resource>& p) {
+	std::unique_lock<std::shared_mutex> ulock(p->getUniqueLock());
+	p->setData(200, ulock);
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+}
 
 int main() {
-	SharedPointer<int> a(new int(100));
-	std::cout << *a << std::endl;
-	SharedPointer<int> b = a;
-	*a = 200;
-	std::cout << *b << std::endl;
-
-	std::cout << std::endl;
-
-	SharedPointer<int> c = std::move(b);
-
-	if (a == c) {
-		std::cout << "Everything works!" << std::endl << std::endl;
+	SharedPointer<Resource> p1(new Resource(100));
+	std::thread t1(threadFunction, p1);
+	std::cout << p1->getData() << std::endl;
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	for (int i = 0; i < 10; i++) {
+		std::cout << p1->getData() << std::endl;
 	}
+	t1.join();
 
-	SharedPointer<int> d(new int(1000));
-
-	std::unordered_set<SharedPointer<int>*, SharedPointerHash<int>> uset;
-	uset.insert(&a);
-	uset.insert(&c);
-	uset.insert(&d);
-
-	std::for_each(uset.begin(), uset.end(), [](SharedPointer<int>* const& sharedPointer) {
-		if (!*sharedPointer) {
-			std::cout << "nullptr" << std::endl;
-		}
-		else {
-			std::cout << **sharedPointer << " ";
-		}
-		});
-	std::cout << std::endl << std::endl;
 	return 0;
 }
