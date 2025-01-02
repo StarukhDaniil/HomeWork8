@@ -5,4 +5,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(hw8 main.cpp sharedPointer.h  sharedPointer.cpp  "resource.h")
+add_library(my_shared_pointer SHARED sharedPointer.cpp)
+target_include_directories(my_shared_pointer PUBLIC ${CMAKE_SOURCE_DIR})
+
+add_executable(hw8 main.cpp)
+
+target_link_libraries(hw8 PRIVATE my_shared_pointer)
